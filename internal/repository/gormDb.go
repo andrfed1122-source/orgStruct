@@ -64,5 +64,20 @@ func (repo *gormDbRepo) SelectDepartmentWhereParentID(ParentID *int) ([]Departme
 }
 
 func (repo *gormDbRepo) InsertDepartment(Depart Department) {
+	//var maxID int
+	//repo.db.Raw("SELECT MAX(id) FROM department").Scan(&maxID)
+	//Depart.ID = maxID
 	repo.db.Create(&Depart)
+}
+func (repo *gormDbRepo) InsertEmployee(Emplo Employee) {
+	repo.db.Create(&Emplo)
+}
+
+func (repo *gormDbRepo) SelectEmployeeWhereDepartmentId(DepartmentId int) ([]Employee, error) {
+	var employees []Employee
+	err := repo.db.Where("parent_id = ?", DepartmentId).Find(&employees)
+	if err.Error != nil {
+		return nil, err.Error
+	}
+	return employees, nil
 }

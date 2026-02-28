@@ -12,7 +12,7 @@ type GormDb struct {
 	Conn *gorm.DB
 }
 
-func NewGormDb() (*GormDb, error) {
+func NewGormDb() *GormDb {
 	// Строка подключения к PostgreSQL
 	dsn := "host=127.0.0.1 port=5432 user=postgres password=12345 dbname=postgres sslmode=disable TimeZone=UTC"
 
@@ -36,5 +36,5 @@ func NewGormDb() (*GormDb, error) {
 	sqlDB.SetMaxOpenConns(100)
 	sqlDB.SetConnMaxLifetime(time.Hour)
 
-	return &GormDb{Conn: db}, nil
+	return &GormDb{Conn: db}
 }

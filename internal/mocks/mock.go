@@ -46,6 +46,18 @@ func (mr *MockDbMockRecorder) InsertDepartment(Depart interface{}) *gomock.Call 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "InsertDepartment", reflect.TypeOf((*MockDb)(nil).InsertDepartment), Depart)
 }
 
+// InsertEmployee mocks base method.
+func (m *MockDb) InsertEmployee(Emplo repository.Employee) {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "InsertEmployee", Emplo)
+}
+
+// InsertEmployee indicates an expected call of InsertEmployee.
+func (mr *MockDbMockRecorder) InsertEmployee(Emplo interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "InsertEmployee", reflect.TypeOf((*MockDb)(nil).InsertEmployee), Emplo)
+}
+
 // SelectDepartmentById mocks base method.
 func (m *MockDb) SelectDepartmentById(id int) (repository.Department, error) {
 	m.ctrl.T.Helper()

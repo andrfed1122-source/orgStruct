@@ -15,7 +15,7 @@ func main() {
 	gormDbRepo := repository.NewGormDbRepo(gormDbConection.Conn)
 	OL := domain.NewOrganizationLogic(gormDbRepo)
 	i := 1
-	err = OL.CreateDivision("test", &i)
+	err = OL.CreateDepartmen("test", &i)
 	if err != nil {
 		log.Fatalln(err)
 	}
