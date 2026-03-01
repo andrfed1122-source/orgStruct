@@ -46,6 +46,15 @@ func (repo *gormDbRepo) SelectDepartmentById(id int) (Department, error) {
 	return department, nil
 }
 
+func (repo *gormDbRepo) SelectDepartmentByName(Name string) (Department, error) {
+	var department Department
+	err := repo.db.Find(&department, Name)
+	if err.Error != nil {
+		return Department{}, err.Error
+	}
+	return department, nil
+}
+
 // получение всех дочерних дипортаментов
 func (repo *gormDbRepo) SelectDepartmentWhereParentID(ParentID *int) ([]Department, error) {
 	var departments []Department
@@ -80,4 +89,24 @@ func (repo *gormDbRepo) SelectEmployeeWhereDepartmentId(DepartmentId int) ([]Emp
 		return nil, err.Error
 	}
 	return employees, nil
+}
+
+func (repo *gormDbRepo) DeleteDepartment(DepartmentId int) {
+	repo.db.Where("ID = ?", DepartmentId).Delete(&Department{})
+}
+
+func (repo *gormDbRepo) DeleteEmployee(Id int) {
+	repo.db.Where("ID = ?", Id).Delete(&Employee{})
+}
+
+func (repo *gormDbRepo) DeleteEmployeeWhereIdPe(Id int) {
+	repo.db.Where("ID = ?", Id).Delete(&Employee{})
+}
+
+func (repo *gormDbRepo) UpdateEmployee(employee Employee) {
+	repo.db.Model(employee).Where("ID = ?", employee.ID).Updates(&employee)
+}
+
+func (repo *gormDbRepo) UpdateDepartmentParentID(ParentID int, Id int) {
+	repo.db.Model(Department{}).Where("ID = ?", Id).Update("parent_id", ParentID)
 }

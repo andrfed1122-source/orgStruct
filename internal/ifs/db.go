@@ -10,4 +10,9 @@ type Db interface {
 	InsertDepartment(Depart repository.Department)
 	InsertEmployee(Emplo repository.Employee)
 	SelectEmployeeWhereDepartmentId(DepartmentId int) ([]repository.Employee, error)
+	DeleteDepartment(DepartmentId int)
+	DeleteEmployee(Id int)
+	UpdateEmployee(employee repository.Employee)
+	SelectDepartmentByName(Name string) (repository.Department, error)
+	UpdateDepartmentParentID(ParentID int, Id int)
 }

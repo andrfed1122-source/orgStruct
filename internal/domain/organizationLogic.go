@@ -100,7 +100,7 @@ func (logic *organizationLogic) InfoDeportament(idDepartmen int, depth *int, inc
 	if err != nil {
 		return repository.Department{}, nil, nil, err
 	}
-	Departmen.Children, err = logic.InfoChildrenDeportament(&idDepartmen)
+	Departmen.Children, err = logic.db.SelectDepartmentWhereParentID(&idDepartmen)
 	if err != nil {
 		return repository.Department{}, nil, nil, err
 	}
@@ -111,7 +111,7 @@ func (logic *organizationLogic) InfoDeportament(idDepartmen int, depth *int, inc
 		}
 		var midlChildren []repository.Department
 		for _, departmentC := range chekChildren {
-			midlChildren, err = logic.InfoChildrenDeportament(&departmentC.ID)
+			midlChildren, err = logic.db.SelectDepartmentWhereParentID(&departmentC.ID)
 			if err != nil {
 				return repository.Department{}, nil, nil, err
 			}
@@ -136,4 +136,135 @@ func (logic *organizationLogic) InfoChildrenDeportament(idDepartmen *int) ([]rep
 		return nil, err
 	}
 	return children, nil
+}
+
+func (logic *organizationLogic) DeleteDeportament(idDepartmen int, mode string, reassignDepartmentId int) error {
+	if mode != "cascade" && mode != "reassign" {
+		return config.ErrorsModeNotСorrect
+	}
+	if mode == "reassign" && reassignDepartmentId < 0 {
+		return config.ErrorsReassignDepartmentId
+	}
+	//проверяем существует ли данное подрозделение
+	Departmen, err := logic.db.SelectDepartmentById(idDepartmen)
+	if err != nil {
+		return err
+	}
+	if Departmen.Name == "" {
+		return config.ErrorsDepartmentNotExist
+	}
+
+	//сбор всех дочерних пердпреятий
+	Departmen.Children, err = logic.db.SelectDepartmentWhereParentID(&idDepartmen)
+	if err != nil {
+		return err
+	}
+	chekChildren := Departmen.Children
+	dep := 1
+	for {
+		if dep == 0 {
+			break
+		}
+		dep = 0
+		var midlChildren []repository.Department
+		for _, departmentC := range chekChildren {
+			midlChildren, err = logic.db.SelectDepartmentWhereParentID(&departmentC.ID)
+			if err != nil {
+				return err
+			}
+			clear(chekChildren)
+			for _, midlChild := range midlChildren {
+				dep++
+				Departmen.Children = append(Departmen.Children, midlChild)
+				chekChildren = append(chekChildren, midlChild)
+
+			}
+		}
+	}
+	//собераем всех сотрудников
+	var ChildrenEmployee = []repository.Employee{}
+	Departmen.Employees, err = logic.db.SelectEmployeeWhereDepartmentId(idDepartmen)
+	if err != nil {
+		return err
+	}
+	for _, department := range Departmen.Children {
+		ChildrenEmployee, err = logic.db.SelectEmployeeWhereDepartmentId(department.ID)
+		for _, CE := range ChildrenEmployee {
+			Departmen.Employees = append(Departmen.Employees, CE)
+		}
+	}
+
+	if mode == "cascade" {
+		//удаляем всех
+		for _, DE := range Departmen.Employees {
+			logic.db.DeleteEmployee(DE.ID)
+		}
+		for _, DC := range Departmen.Children {
+			logic.db.DeleteDepartment(DC.ID)
+		}
+	}
+	if mode == "reassign" {
+		for _, DE := range Departmen.Employees {
+			DE.DepartmentID = reassignDepartmentId
+			logic.db.UpdateEmployee(DE)
+		}
+		for _, DC := range Departmen.Children {
+			logic.db.DeleteDepartment(DC.ID)
+		}
+	}
+	return nil
+}
+
+func (logic *organizationLogic) UpdateDeportament(idDepartmen int, name string, ParentID int) error {
+	if idDepartmen < 1 && name == "" {
+		return config.ErrorsNameNotСorrect
+	}
+	var Departmen repository.Department
+	var err error
+	if name != "" {
+		Departmen, err = logic.db.SelectDepartmentById(idDepartmen)
+		if err != nil {
+			return err
+		}
+	} else {
+		Departmen, err = logic.db.SelectDepartmentByName(name)
+		if err != nil {
+			return err
+		}
+	}
+	//проверка на создание кольца депортаментов
+	//собираем депортаменты дочернии первого порядка
+	Departmen.Children, err = logic.db.SelectDepartmentWhereParentID(&idDepartmen)
+	if err != nil {
+		return err
+	}
+	chekChildren := Departmen.Children
+	dep := 1
+	for {
+		if dep == 0 {
+			break
+		}
+		dep = 0
+		var midlChildren []repository.Department
+		for _, departmentC := range chekChildren {
+			midlChildren, err = logic.db.SelectDepartmentWhereParentID(&departmentC.ID)
+			if err != nil {
+				return err
+			}
+			clear(chekChildren)
+			for _, midlChild := range midlChildren {
+				dep++
+				Departmen.Children = append(Departmen.Children, midlChild)
+				chekChildren = append(chekChildren, midlChild)
+
+			}
+		}
+	}
+	for _, DC := range Departmen.Children {
+		if DC.ID == idDepartmen || DC.Name == name {
+			return config.ErrorsLoopingDepartment
+		}
+	}
+	logic.db.UpdateDepartmentParentID(ParentID, Departmen.ID)
+	return nil
 }

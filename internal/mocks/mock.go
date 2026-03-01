@@ -87,3 +87,18 @@ func (mr *MockDbMockRecorder) SelectDepartmentWhereParentID(ParentID interface{}
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SelectDepartmentWhereParentID", reflect.TypeOf((*MockDb)(nil).SelectDepartmentWhereParentID), ParentID)
 }
+
+// SelectEmployeeWhereDepartmentId mocks base method.
+func (m *MockDb) SelectEmployeeWhereDepartmentId(DepartmentId int) ([]repository.Employee, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SelectEmployeeWhereDepartmentId", DepartmentId)
+	ret0, _ := ret[0].([]repository.Employee)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// SelectEmployeeWhereDepartmentId indicates an expected call of SelectEmployeeWhereDepartmentId.
+func (mr *MockDbMockRecorder) SelectEmployeeWhereDepartmentId(DepartmentId interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SelectEmployeeWhereDepartmentId", reflect.TypeOf((*MockDb)(nil).SelectEmployeeWhereDepartmentId), DepartmentId)
+}
