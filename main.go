@@ -1,22 +1,7 @@
 package main
 
-import (
-	"log"
-	"orgStruct/internal/config"
-	"orgStruct/internal/domain"
-	"orgStruct/internal/repository"
-)
+import "orgStruct/internal/handler"
 
 func main() {
-	gormDbConection, err := config.NewGormDb()
-	if err != nil {
-		log.Fatalln(err)
-	}
-	gormDbRepo := repository.NewGormDbRepo(gormDbConection.Conn)
-	OL := domain.NewOrganizationLogic(gormDbRepo)
-	i := 1
-	err = OL.CreateDepartmen("test", &i)
-	if err != nil {
-		log.Fatalln(err)
-	}
+	handler.HttpServerStart()
 }

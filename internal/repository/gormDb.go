@@ -39,16 +39,16 @@ func (repo *gormDbRepo) SelectEmployee() error {
 // получение конкретного дипортамента
 func (repo *gormDbRepo) SelectDepartmentById(id int) (Department, error) {
 	var department Department
-	err := repo.db.Find(&department, id)
+	err := repo.db.Where("ID = ?", id).Find(&department)
 	if err.Error != nil {
 		return Department{}, err.Error
 	}
 	return department, nil
 }
 
-func (repo *gormDbRepo) SelectDepartmentByName(Name string) (Department, error) {
+func (repo *gormDbRepo) SelectDepartmentByName(name string, ParentID *int) (Department, error) {
 	var department Department
-	err := repo.db.Find(&department, Name)
+	err := repo.db.Where("Name = ? AND ParentID = ?", name, ParentID).Find(&department)
 	if err.Error != nil {
 		return Department{}, err.Error
 	}
@@ -72,11 +72,12 @@ func (repo *gormDbRepo) SelectDepartmentWhereParentID(ParentID *int) ([]Departme
 	return departments, nil
 }
 
-func (repo *gormDbRepo) InsertDepartment(Depart Department) {
+func (repo *gormDbRepo) InsertDepartment(Depart Department) Department {
 	//var maxID int
 	//repo.db.Raw("SELECT MAX(id) FROM department").Scan(&maxID)
 	//Depart.ID = maxID
 	repo.db.Create(&Depart)
+	return Depart
 }
 func (repo *gormDbRepo) InsertEmployee(Emplo Employee) {
 	repo.db.Create(&Emplo)
