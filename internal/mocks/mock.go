@@ -34,10 +34,36 @@ func (m *MockDb) EXPECT() *MockDbMockRecorder {
 	return m.recorder
 }
 
-// InsertDepartment mocks base method.
-func (m *MockDb) InsertDepartment(Depart repository.Department) {
+// DeleteDepartment mocks base method.
+func (m *MockDb) DeleteDepartment(DepartmentId int) {
 	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "InsertDepartment", Depart)
+	m.ctrl.Call(m, "DeleteDepartment", DepartmentId)
+}
+
+// DeleteDepartment indicates an expected call of DeleteDepartment.
+func (mr *MockDbMockRecorder) DeleteDepartment(DepartmentId interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteDepartment", reflect.TypeOf((*MockDb)(nil).DeleteDepartment), DepartmentId)
+}
+
+// DeleteEmployee mocks base method.
+func (m *MockDb) DeleteEmployee(Id int) {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "DeleteEmployee", Id)
+}
+
+// DeleteEmployee indicates an expected call of DeleteEmployee.
+func (mr *MockDbMockRecorder) DeleteEmployee(Id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteEmployee", reflect.TypeOf((*MockDb)(nil).DeleteEmployee), Id)
+}
+
+// InsertDepartment mocks base method.
+func (m *MockDb) InsertDepartment(Depart repository.Department) repository.Department {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "InsertDepartment", Depart)
+	ret0, _ := ret[0].(repository.Department)
+	return ret0
 }
 
 // InsertDepartment indicates an expected call of InsertDepartment.
@@ -73,6 +99,21 @@ func (mr *MockDbMockRecorder) SelectDepartmentById(id interface{}) *gomock.Call 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SelectDepartmentById", reflect.TypeOf((*MockDb)(nil).SelectDepartmentById), id)
 }
 
+// SelectDepartmentByName mocks base method.
+func (m *MockDb) SelectDepartmentByName(name string, ParentID *int) (repository.Department, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SelectDepartmentByName", name, ParentID)
+	ret0, _ := ret[0].(repository.Department)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// SelectDepartmentByName indicates an expected call of SelectDepartmentByName.
+func (mr *MockDbMockRecorder) SelectDepartmentByName(name, ParentID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SelectDepartmentByName", reflect.TypeOf((*MockDb)(nil).SelectDepartmentByName), name, ParentID)
+}
+
 // SelectDepartmentWhereParentID mocks base method.
 func (m *MockDb) SelectDepartmentWhereParentID(ParentID *int) ([]repository.Department, error) {
 	m.ctrl.T.Helper()
@@ -101,4 +142,140 @@ func (m *MockDb) SelectEmployeeWhereDepartmentId(DepartmentId int) ([]repository
 func (mr *MockDbMockRecorder) SelectEmployeeWhereDepartmentId(DepartmentId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SelectEmployeeWhereDepartmentId", reflect.TypeOf((*MockDb)(nil).SelectEmployeeWhereDepartmentId), DepartmentId)
+}
+
+// UpdateDepartmentParentID mocks base method.
+func (m *MockDb) UpdateDepartmentParentID(ParentID, Id int) {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "UpdateDepartmentParentID", ParentID, Id)
+}
+
+// UpdateDepartmentParentID indicates an expected call of UpdateDepartmentParentID.
+func (mr *MockDbMockRecorder) UpdateDepartmentParentID(ParentID, Id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateDepartmentParentID", reflect.TypeOf((*MockDb)(nil).UpdateDepartmentParentID), ParentID, Id)
+}
+
+// UpdateEmployee mocks base method.
+func (m *MockDb) UpdateEmployee(employee repository.Employee) {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "UpdateEmployee", employee)
+}
+
+// UpdateEmployee indicates an expected call of UpdateEmployee.
+func (mr *MockDbMockRecorder) UpdateEmployee(employee interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateEmployee", reflect.TypeOf((*MockDb)(nil).UpdateEmployee), employee)
+}
+
+// MockLogic is a mock of Logic interface.
+type MockLogic struct {
+	ctrl     *gomock.Controller
+	recorder *MockLogicMockRecorder
+}
+
+// MockLogicMockRecorder is the mock recorder for MockLogic.
+type MockLogicMockRecorder struct {
+	mock *MockLogic
+}
+
+// NewMockLogic creates a new mock instance.
+func NewMockLogic(ctrl *gomock.Controller) *MockLogic {
+	mock := &MockLogic{ctrl: ctrl}
+	mock.recorder = &MockLogicMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockLogic) EXPECT() *MockLogicMockRecorder {
+	return m.recorder
+}
+
+// CreateDepartmen mocks base method.
+func (m *MockLogic) CreateDepartmen(name string, ParentID *int) (repository.Department, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateDepartmen", name, ParentID)
+	ret0, _ := ret[0].(repository.Department)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateDepartmen indicates an expected call of CreateDepartmen.
+func (mr *MockLogicMockRecorder) CreateDepartmen(name, ParentID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateDepartmen", reflect.TypeOf((*MockLogic)(nil).CreateDepartmen), name, ParentID)
+}
+
+// CreateEmployee mocks base method.
+func (m *MockLogic) CreateEmployee(fullName, position string, idDepartmen int) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateEmployee", fullName, position, idDepartmen)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// CreateEmployee indicates an expected call of CreateEmployee.
+func (mr *MockLogicMockRecorder) CreateEmployee(fullName, position, idDepartmen interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateEmployee", reflect.TypeOf((*MockLogic)(nil).CreateEmployee), fullName, position, idDepartmen)
+}
+
+// DeleteDeportament mocks base method.
+func (m *MockLogic) DeleteDeportament(idDepartmen int, mode string, reassignDepartmentId int) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteDeportament", idDepartmen, mode, reassignDepartmentId)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteDeportament indicates an expected call of DeleteDeportament.
+func (mr *MockLogicMockRecorder) DeleteDeportament(idDepartmen, mode, reassignDepartmentId interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteDeportament", reflect.TypeOf((*MockLogic)(nil).DeleteDeportament), idDepartmen, mode, reassignDepartmentId)
+}
+
+// InfoChildrenDeportament mocks base method.
+func (m *MockLogic) InfoChildrenDeportament(idDepartmen *int) ([]repository.Department, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "InfoChildrenDeportament", idDepartmen)
+	ret0, _ := ret[0].([]repository.Department)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// InfoChildrenDeportament indicates an expected call of InfoChildrenDeportament.
+func (mr *MockLogicMockRecorder) InfoChildrenDeportament(idDepartmen interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "InfoChildrenDeportament", reflect.TypeOf((*MockLogic)(nil).InfoChildrenDeportament), idDepartmen)
+}
+
+// InfoDeportament mocks base method.
+func (m *MockLogic) InfoDeportament(idDepartmen int, depth *int, includeEmployees *bool) (repository.Department, []repository.Employee, []repository.Department, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "InfoDeportament", idDepartmen, depth, includeEmployees)
+	ret0, _ := ret[0].(repository.Department)
+	ret1, _ := ret[1].([]repository.Employee)
+	ret2, _ := ret[2].([]repository.Department)
+	ret3, _ := ret[3].(error)
+	return ret0, ret1, ret2, ret3
+}
+
+// InfoDeportament indicates an expected call of InfoDeportament.
+func (mr *MockLogicMockRecorder) InfoDeportament(idDepartmen, depth, includeEmployees interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "InfoDeportament", reflect.TypeOf((*MockLogic)(nil).InfoDeportament), idDepartmen, depth, includeEmployees)
+}
+
+// UpdateDeportament mocks base method.
+func (m *MockLogic) UpdateDeportament(idDepartmen int, name string, ParentID int) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateDeportament", idDepartmen, name, ParentID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateDeportament indicates an expected call of UpdateDeportament.
+func (mr *MockLogicMockRecorder) UpdateDeportament(idDepartmen, name, ParentID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateDeportament", reflect.TypeOf((*MockLogic)(nil).UpdateDeportament), idDepartmen, name, ParentID)
 }
