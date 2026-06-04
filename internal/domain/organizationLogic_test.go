@@ -136,7 +136,8 @@ func Test_organizationLogic_CreateDivision(t *testing.T) {
 			logic := &organizationLogic{
 				db: tt.fields.db(),
 			}
-			if err := logic.CreateDepartmen(tt.args.name, tt.args.ParentID); (err != nil) != tt.wantErr {
+			_, err := logic.CreateDepartmen(tt.args.name, tt.args.ParentID)
+			if (err != nil) != tt.wantErr {
 				t.Errorf("CreateDivision() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
